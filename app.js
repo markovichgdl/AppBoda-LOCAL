@@ -18,14 +18,16 @@ const storage = multer.diskStorage({
     cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
+    const clientName = req.body.clientName ? req.body.clientName : "Anonimo";
+    cb(null, `${clientName}-${Date.now()}${path.extname(file.originalname)}`);
   },
 });
 
 const upload = multer({ storage: storage });
 
-// Middleware para servir archivos estáticos
+// Middleware para servir archivos estáticos y para parsear el body
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.urlencoded({ extended: true }));
 
 // Ruta de subida de archivos
 app.post("/upload", upload.array("files"), (req, res) => {
