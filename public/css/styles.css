@@ -33,7 +33,7 @@ body {
   position: absolute;
   bottom: 10px;
   left: 10px; /* Ajuste para la esquina izquierda */
-  width: 40px; /* Medida solicitada */
+  width: 35px; /* Medida solicitada */
   height: auto; /* Para mantener la proporción */
   z-index: 10; /* Asegura que esté sobre otros elementos */
 }
