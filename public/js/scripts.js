@@ -1,18 +1,19 @@
-// scripts.js
-
 document.getElementById("files").addEventListener("change", function () {
-  const fileCount = this.files.length;
+  const files = this.files;
+  const fileCount = files.length;
   const customFileButton = document.getElementById("customFileButton");
 
   if (fileCount === 0) {
     customFileButton.textContent = "Seleccionar Archivos";
   } else {
     customFileButton.textContent = `${fileCount} Archivos seleccionados.`;
-    confirmUpload(this.files);
+    confirmUpload(files);
   }
 });
 
 function confirmUpload(files) {
+  const Swal = window.Swal; // Assuming Swal is globally available
+
   Swal.fire({
     title: "¿Estás listo para subir tus fotos y videos?",
     html: `
@@ -37,13 +38,15 @@ function confirmUpload(files) {
   }).then((result) => {
     if (result.isConfirmed) {
       const clientName = document.getElementById("clientName").value;
-      showNoticeMessage(clientName);
+      showNoticeMessage();
       uploadFiles(files, clientName);
     }
   });
 }
 
-function showNoticeMessage(clientName) {
+function showNoticeMessage() {
+  const Swal = window.Swal; // Assuming Swal is globally available
+
   Swal.fire({
     icon: "info",
     title: "Aviso de Paciencia",
@@ -53,6 +56,12 @@ function showNoticeMessage(clientName) {
 }
 
 function uploadFiles(files, clientName) {
+  const Swal = window.Swal; // Assuming Swal is globally available
+
+  const maxSizeInBytes = 150 * 1024 * 1024; // 150MB en bytes
+  const maxFiles = 5;
+  const formData = new FormData();
+
   if (files.length === 0) {
     Swal.fire({
       icon: "error",
@@ -63,31 +72,36 @@ function uploadFiles(files, clientName) {
     return;
   }
 
-  const maxSizeInBytes = 150 * 1024 * 1024; // 150MB en bytes
+  let filesExceedingSizeLimit = [];
   for (let i = 0; i < files.length; i++) {
     if (files[i].size > maxSizeInBytes) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: `El archivo ${files[i].name} excede el tamaño máximo permitido de 150MB.`,
-        confirmButtonColor: "#6c757d",
-      });
-      return;
+      filesExceedingSizeLimit.push(files[i].name);
     }
   }
 
-  if (files.length > 5) {
+  if (filesExceedingSizeLimit.length > 0) {
     Swal.fire({
       icon: "error",
       title: "Error",
-      text: "No puedes subir más de 5 archivos a la vez.",
+      text: `Los siguientes archivos exceden el tamaño máximo permitido de 150MB: ${filesExceedingSizeLimit.join(
+        ", "
+      )}.`,
       confirmButtonColor: "#6c757d",
     });
     return;
   }
 
-  const formData = new FormData();
-  formData.append("clientName", clientName); // Incluir el nombre del cliente en el formData
+  if (files.length > maxFiles) {
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: `No puedes subir más de ${maxFiles} archivos a la vez.`,
+      confirmButtonColor: "#6c757d",
+    });
+    return;
+  }
+
+  formData.append("clientName", clientName);
   for (let i = 0; i < files.length; i++) {
     formData.append("files", files[i]);
   }
