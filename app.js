@@ -4,7 +4,7 @@ const path = require("path");
 const fs = require("fs");
 
 const app = express();
-const port = process.env.PORT || 5896;
+const port = process.env.PORT || 3000;
 const uploadDir = process.env.UPLOAD_DIR || "uploads";
 
 // Asegúrate de que el directorio de subidas existe
@@ -43,7 +43,7 @@ app.post("/upload", upload.array("files", 5), (req, res) => {
   }
 });
 // Escucha solo en localhost (127.0.0.1)
-app.listen(port, "200.58.106.131", () => {
+app.listen(port, "localhost", () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
 });
 // Cambia 'localhost' a '0.0.0.0' para que escuche en todas las interfaces de red
