@@ -46,10 +46,11 @@ app.post("/upload", upload.array("files", 5), (req, res) => {
 app.listen(port, "localhost", () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
 });
-// Cambia 'localhost' a '0.0.0.0' para que escuche en todas las interfaces de red
-//app.listen(port, "0.0.0.0", () => {
-//console.log(`Servidor corriendo en http://localhost:${port}`);
-//});
+
+// Escucha en todas las interfaces de red
+app.listen(port, "0.0.0.0", () => {
+  console.log(`Servidor corriendo en http://localhost:${port}`);
+});
 
 // Función para sanitizar el nombre del cliente
 function sanitizeFilename(filename) {
