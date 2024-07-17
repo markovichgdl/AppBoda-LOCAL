@@ -47,11 +47,6 @@ app.listen(port, "localhost", () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
 });
 
-// Escucha en todas las interfaces de red
-app.listen(port, "0.0.0.0", () => {
-  console.log(`Servidor corriendo en http://localhost:${port}`);
-});
-
 // Función para sanitizar el nombre del cliente
 function sanitizeFilename(filename) {
   // Implementa tu lógica de sanitización aquí, por ejemplo, eliminando caracteres no deseados
